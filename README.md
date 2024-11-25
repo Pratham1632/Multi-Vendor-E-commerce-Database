@@ -1,109 +1,36 @@
-Create the database
-CREATE DATABASE MultiVendorECommerce;
-USE MultiVendorECommerce;
+# Multi-Vendor E-commerce Database
 
-Table for users (customers)
-CREATE TABLE Users (
-    UserID INT AUTO_INCREMENT PRIMARY KEY,
-    Username VARCHAR(50) NOT NULL UNIQUE,
-    Email VARCHAR(100) NOT NULL UNIQUE,
-    PasswordHash VARCHAR(255) NOT NULL,
-    FullName VARCHAR(100),
-    PhoneNumber VARCHAR(15),
-    Address TEXT,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+## Description
+This project is a scalable **MySQL database** designed to support a multi-vendor e-commerce platform. It efficiently manages users, sellers, products, categories, orders, payments, and reviews while ensuring data integrity and relational consistency. The database is optimized for querying large datasets and supports essential e-commerce functionality such as order tracking, product reviews, and multi-payment methods.
 
-Table for sellers
-CREATE TABLE Sellers (
-    SellerID INT AUTO_INCREMENT PRIMARY KEY,
-    SellerName VARCHAR(100) NOT NULL,
-    Email VARCHAR(100) NOT NULL UNIQUE,
-    PasswordHash VARCHAR(255) NOT NULL,
-    ContactNumber VARCHAR(15),
-    StoreName VARCHAR(100) UNIQUE,
-    StoreAddress TEXT,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+---
 
-Table for product categories
-CREATE TABLE Categories (
-    CategoryID INT AUTO_INCREMENT PRIMARY KEY,
-    CategoryName VARCHAR(100) NOT NULL UNIQUE,
-    Description TEXT
-);
+## Features
+- **User Management**: Stores customer details, including usernames, emails, addresses, and phone numbers.
+- **Seller Management**: Manages seller profiles, store details, and product listings.
+- **Product Management**: Handles product information, categories, pricing, and inventory levels.
+- **Order Management**: Tracks orders, order items, and their statuses (Pending, Shipped, Delivered, etc.).
+- **Payment Processing**: Supports multiple payment methods (Credit Card, PayPal, COD, etc.) and tracks payment statuses.
+- **Product Reviews**: Allows customers to leave ratings and comments on products.
 
-Table for products
-CREATE TABLE Products (
-    ProductID INT AUTO_INCREMENT PRIMARY KEY,
-    ProductName VARCHAR(100) NOT NULL,
-    Description TEXT,
-    Price DECIMAL(10, 2) NOT NULL,
-    QuantityAvailable INT DEFAULT 0,
-    SellerID INT,
-    CategoryID INT,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (SellerID) REFERENCES Sellers(SellerID) ON DELETE CASCADE,
-    FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID) ON DELETE SET NULL
-);
+---
 
-Table for orders
-CREATE TABLE Orders (
-    OrderID INT AUTO_INCREMENT PRIMARY KEY,
-    UserID INT,
-    OrderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    TotalAmount DECIMAL(10, 2) NOT NULL,
-    Status ENUM('Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled') DEFAULT 'Pending',
-    FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE
-);
+## Database Schema
+The database contains the following main tables:
+1. **Users**: Stores customer data.
+2. **Sellers**: Manages seller details.
+3. **Categories**: Organizes products into categories.
+4. **Products**: Stores product details with relationships to sellers and categories.
+5. **Orders**: Tracks orders and their statuses.
+6. **OrderItems**: Associates products with specific orders.
+7. **Reviews**: Manages customer reviews and ratings.
+8. **Payments**: Tracks payment details for orders.
 
-Table for order items
-CREATE TABLE OrderItems (
-    OrderItemID INT AUTO_INCREMENT PRIMARY KEY,
-    OrderID INT,
-    ProductID INT,
-    Quantity INT NOT NULL,
-    Price DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID) ON DELETE CASCADE,
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID) ON DELETE CASCADE
-);
+---
 
-Table for product reviews
-CREATE TABLE Reviews (
-    ReviewID INT AUTO_INCREMENT PRIMARY KEY,
-    ProductID INT,
-    UserID INT,
-    Rating INT CHECK (Rating BETWEEN 1 AND 5),
-    Comment TEXT,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID) ON DELETE CASCADE,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE
-);
-
-Table for payments
-CREATE TABLE Payments (
-    PaymentID INT AUTO_INCREMENT PRIMARY KEY,
-    OrderID INT,
-    PaymentMethod ENUM('Credit Card', 'Debit Card', 'PayPal', 'Net Banking', 'COD') NOT NULL,
-    PaymentStatus ENUM('Pending', 'Completed', 'Failed') DEFAULT 'Pending',
-    PaymentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID) ON DELETE CASCADE
-);
-
-Sample data insertion for testing
-INSERT INTO Categories (CategoryName, Description)
-VALUES 
-    ('Electronics', 'Devices and gadgets'),
-    ('Books', 'Printed and digital books'),
-    ('Clothing', 'Men and Women apparel');
-
-INSERT INTO Sellers (SellerName, Email, PasswordHash, ContactNumber, StoreName, StoreAddress)
-VALUES 
-    ('TechMart', 'techmart@example.com', 'hashed_password1', '1234567890', 'TechMart Store', '123 Tech Street'),
-    ('BookWorld', 'bookworld@example.com', 'hashed_password2', '0987654321', 'BookWorld Store', '456 Book Lane');
-
-INSERT INTO Products (ProductName, Description, Price, QuantityAvailable, SellerID, CategoryID)
-VALUES 
-    ('Smartphone', 'Latest Android smartphone', 699.99, 50, 1, 1),
-    ('Laptop', 'Lightweight laptop for productivity', 1299.99, 20, 1, 1),
-    ('Fiction Book', 'Bestselling fiction novel', 19.99, 100, 2, 2);
+## Installation
+1. **Install MySQL**: Ensure MySQL is installed on your system.
+2. **Clone Repository**: Clone or download the project files to your local machine.
+3. **Run the SQL Script**: Use the provided SQL file (`ecommerce_schema.sql`) to create the database and tables:
+   ```bash
+   mysql -u username -p database_name < ecommerce_schema.sql
