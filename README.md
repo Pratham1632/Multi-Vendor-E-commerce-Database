@@ -1,8 +1,8 @@
--- Create the database
+Create the database
 CREATE DATABASE MultiVendorECommerce;
 USE MultiVendorECommerce;
 
--- Table for users (customers)
+Table for users (customers)
 CREATE TABLE Users (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(50) NOT NULL UNIQUE,
@@ -14,7 +14,7 @@ CREATE TABLE Users (
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for sellers
+Table for sellers
 CREATE TABLE Sellers (
     SellerID INT AUTO_INCREMENT PRIMARY KEY,
     SellerName VARCHAR(100) NOT NULL,
@@ -26,14 +26,14 @@ CREATE TABLE Sellers (
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for product categories
+Table for product categories
 CREATE TABLE Categories (
     CategoryID INT AUTO_INCREMENT PRIMARY KEY,
     CategoryName VARCHAR(100) NOT NULL UNIQUE,
     Description TEXT
 );
 
--- Table for products
+Table for products
 CREATE TABLE Products (
     ProductID INT AUTO_INCREMENT PRIMARY KEY,
     ProductName VARCHAR(100) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE Products (
     FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID) ON DELETE SET NULL
 );
 
--- Table for orders
+Table for orders
 CREATE TABLE Orders (
     OrderID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT,
@@ -57,7 +57,7 @@ CREATE TABLE Orders (
     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE
 );
 
--- Table for order items
+Table for order items
 CREATE TABLE OrderItems (
     OrderItemID INT AUTO_INCREMENT PRIMARY KEY,
     OrderID INT,
@@ -68,7 +68,7 @@ CREATE TABLE OrderItems (
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID) ON DELETE CASCADE
 );
 
--- Table for product reviews
+Table for product reviews
 CREATE TABLE Reviews (
     ReviewID INT AUTO_INCREMENT PRIMARY KEY,
     ProductID INT,
@@ -80,7 +80,7 @@ CREATE TABLE Reviews (
     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE
 );
 
--- Table for payments
+Table for payments
 CREATE TABLE Payments (
     PaymentID INT AUTO_INCREMENT PRIMARY KEY,
     OrderID INT,
@@ -90,7 +90,7 @@ CREATE TABLE Payments (
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID) ON DELETE CASCADE
 );
 
--- Sample data insertion for testing
+Sample data insertion for testing
 INSERT INTO Categories (CategoryName, Description)
 VALUES 
     ('Electronics', 'Devices and gadgets'),
