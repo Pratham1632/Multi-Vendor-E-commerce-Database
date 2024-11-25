@@ -33,4 +33,4 @@ The database contains the following main tables:
 2. **Clone Repository**: Clone or download the project files to your local machine.
 3. **Run the SQL Script**: Use the provided SQL file (`ecommerce_schema.sql`) to create the database and tables:
    ```bash
-   mysql -u username -p database_name < ecommerce_schema.sql
+
